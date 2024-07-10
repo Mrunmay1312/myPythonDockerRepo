@@ -51,9 +51,9 @@ stages:
         targetType: 'inline'
         script: |
           # Variables
-          $organization = "mnandanwar50"  
-          $project = "Mrunmay" 
-          $buildId = "20240710.3" 
+          organization = "mnandanwar50"  
+          project = "Mrunmay" 
+          buildId = "20240710.3" 
           
           # Base64-encode the PAT for use in the Authorization header
           $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($pat)"))
