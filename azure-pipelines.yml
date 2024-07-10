@@ -66,14 +66,9 @@ stages:
               "retain" = $true
           } | ConvertTo-Json
 
-          # Construct headers
-          $headers = @{
-              Authorization = "Basic $base64AuthInfo"
-              ContentType = "application/json"
-          }
-
           # Send the request to retain the build
-          $response = Invoke-RestMethod -Uri $uri -Method Patch -Body $body -Headers $headers
+          $response = Invoke-RestMethod -Uri $uri -Method Patch -Body $body -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
 
           # Output the response
           Write-Output $response
+
