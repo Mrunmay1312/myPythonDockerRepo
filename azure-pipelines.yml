@@ -46,3 +46,28 @@ stages:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
         ArtifactName: 'drop'
         publishLocation: 'Container'
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: |
+          # Variables
+          $organization = "mnandanwar50"  
+          $project = "Mrunmay" 
+          $buildId = "20240710.3" 
+          
+          # Base64-encode the PAT for use in the Authorization header
+          $base64AuthInfo = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes(":$($pat)"))
+          
+          # Azure DevOps API URL to update the build retention
+          $uri = "https://dev.azure.com/$organization/$project/_apis/build/builds/$buildId?api-version=6.0"
+          
+          # Create the request body to retain the build
+          $body = @{
+              "retain" = $true
+          } | ConvertTo-Json
+          
+          # Send the request to retain the build
+          $response = Invoke-RestMethod -Uri $uri -Method Patch -Body $body -ContentType "application/json" -Headers @{Authorization=("Basic {0}" -f $base64AuthInfo)}
+          
+          # Output the response
+          Write-Output $response
